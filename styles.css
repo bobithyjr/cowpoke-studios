@@ -1,0 +1,186 @@
+:root {
+  --bg: #000;
+  --fg: #fff;
+  --accent: #e50914;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: Arial, sans-serif;
+}
+
+/* NAV */
+.top-nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 72px;
+  background: linear-gradient(to bottom, rgba(0,0,0,.95), transparent);
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  z-index: 100;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.logo {
+  height: 36px;
+}
+
+nav {
+  display: flex;
+  gap: 24px;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 6px;
+}
+
+.nav-link:hover {
+  color: var(--accent);
+}
+
+.nav-link.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--accent);
+}
+
+/* HERO */
+.hero {
+  height: 90vh;
+  margin-top: 72px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,.9), rgba(0,0,0,.2));
+}
+
+.hero-content {
+  position: relative;
+  padding: 140px 60px;
+  max-width: 640px;
+}
+
+.hero-content h1 {
+  font-size: 2.4rem;
+}
+
+.hero-buttons button {
+  background: var(--accent);
+  border: none;
+  padding: 12px 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* LATEST */
+.latest {
+  padding: 40px 60px;
+}
+
+.latest-row {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+}
+
+/* VIDEOS */
+.video-grid {
+  padding: 40px 60px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
+  gap: 24px;
+}
+
+.video-card {
+  aspect-ratio: 16 / 9;
+  background-size: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform .2s;
+}
+
+.video-card:hover {
+  transform: scale(1.05);
+}
+
+/* PLAYER */
+.player-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+}
+
+.player-modal.hidden {
+  display: none;
+}
+
+.player-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.85);
+}
+
+.player-container {
+  width: 80%;
+  max-width: 960px;
+  aspect-ratio: 16/9;
+  margin: 8vh auto;
+  position: relative;
+}
+
+.player-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.close-player {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* STORE */
+.store {
+  padding: 140px 60px;
+}
+
+.section {
+  padding: 40px 60px;
+}
+
+.section h2 {
+  margin-bottom: 20px;
+}
+
