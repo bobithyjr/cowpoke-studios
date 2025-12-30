@@ -39,7 +39,7 @@ async function fetchVideos() {
   - Trailers: title contains "trailer"
 */
 function isMovie(v) {
-  return v.snippet.title.toLowerCase().includes("movie");
+  return v.snippet.title.toLowerCase().includes("film");
 }
 
 function isTrailer(v) {
@@ -80,4 +80,5 @@ async function init() {
 }
 
 init();
+
 
