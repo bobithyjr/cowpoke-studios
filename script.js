@@ -1,7 +1,7 @@
 // script.js (replace your old file with this)
 
 // CONFIG
-const API_KEY = "AIzaSyBbIyhTF1CDTVs0yphhNcROXJFpQnPxuMA";
+const API_KEY = "AIzaSyB4KnPwmk9KLhIJHPi3hh-FeMrX9fSoBC8";
 const CHANNEL_ID = "UCdKMVxPe_ggYx86xorqBgtA";
 
 // DOM helpers
@@ -174,3 +174,4 @@ async function init() {
 
 // Start
 init();
+
