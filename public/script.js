@@ -1,5 +1,11 @@
 /* ================================
-   ELEMENT REFERENCES (SAFE)
+   CONFIG
+================================ */
+
+const MOCK_MODE = true; // ← TURN OFF LATER
+
+/* ================================
+   ELEMENT REFERENCES
 ================================ */
 
 const hero = document.getElementById("hero");
@@ -15,19 +21,42 @@ const playerFrame = document.getElementById("player-frame");
 const closePlayerBtn = document.getElementById("close-player");
 
 /* ================================
-   STATE
+   MOCK DATA
 ================================ */
 
-let heroVideos = [];
-let heroIndex = 0;
-let heroTimer = null;
+function randomColor() {
+  return `hsl(${Math.random() * 360}, 70%, 45%)`;
+}
+
+function generateMockVideos(count, prefix) {
+  return Array.from({ length: count }).map((_, i) => ({
+    id: `mock-${prefix}-${i}`,
+    source: "youtube",
+    youtubeId: "mock",
+    title: `${prefix} Title ${i + 1}`,
+    thumbnail: null,
+    color: randomColor()
+  }));
+}
+
+function getMockData() {
+  return {
+    hero: generateMockVideos(3, "Featured"),
+    latest: generateMockVideos(10, "Latest"),
+    movies: generateMockVideos(8, "Movie"),
+    trailers: generateMockVideos(6, "Trailer")
+  };
+}
 
 /* ================================
-   PLAYER
+   PLAYER (DISABLED IN MOCK)
 ================================ */
 
 function openVideo(video) {
-  if (!video) return;
+  if (MOCK_MODE) {
+    alert(`PLAY: ${video.title}`);
+    return;
+  }
 
   if (video.source === "youtube") {
     playerFrame.src =
@@ -40,9 +69,8 @@ function openVideo(video) {
 }
 
 function closePlayer() {
-  if (!playerFrame || !player) return;
   playerFrame.src = "";
-  player.classList.add("hidden");
+  player?.classList.add("hidden");
 }
 
 closePlayerBtn?.addEventListener("click", closePlayer);
@@ -56,8 +84,16 @@ player?.querySelector(".player-backdrop")
 function createVideoCard(video) {
   const card = document.createElement("div");
   card.className = "video-card";
-  card.style.backgroundImage = `url(${video.thumbnail})`;
-  card.title = video.title;
+
+  if (video.thumbnail) {
+    card.style.backgroundImage = `url(${video.thumbnail})`;
+  } else {
+    card.style.background = video.color;
+  }
+
+  const label = document.createElement("span");
+  label.textContent = video.title;
+  card.appendChild(label);
 
   card.addEventListener("click", () => openVideo(video));
   return card;
@@ -71,13 +107,18 @@ function renderRow(videos, container) {
 }
 
 /* ================================
-   HERO (SAFE)
+   HERO
 ================================ */
+
+let heroVideos = [];
+let heroIndex = 0;
 
 function renderHero(video) {
   if (!hero || !video) return;
 
-  hero.style.backgroundImage = `url(${video.thumbnail})`;
+  hero.style.background =
+    video.thumbnail ? `url(${video.thumbnail})` : video.color;
+
   heroTitle.textContent = video.title;
   heroPlay.onclick = () => openVideo(video);
 }
@@ -87,7 +128,7 @@ function startHeroRotation() {
 
   renderHero(heroVideos[0]);
 
-  heroTimer = setInterval(() => {
+  setInterval(() => {
     heroIndex = (heroIndex + 1) % heroVideos.length;
     renderHero(heroVideos[heroIndex]);
   }, 8000);
@@ -98,24 +139,25 @@ function startHeroRotation() {
 ================================ */
 
 async function init() {
-  try {
+  let data;
+
+  if (MOCK_MODE) {
+    data = getMockData();
+  } else {
     const res = await fetch("/api/videos");
-    const data = await res.json();
-
-    // HERO (only on index.html)
-    if (hero && Array.isArray(data.hero)) {
-      heroVideos = data.hero;
-      startHeroRotation();
-    }
-
-    // ROWS (safe everywhere)
-    renderRow(data.latest, latestRow);
-    renderRow(data.movies, moviesRow);
-    renderRow(data.trailers, trailersRow);
-
-  } catch (err) {
-    console.error("Failed to load videos:", err);
+    data = await res.json();
   }
+
+  // HERO
+  if (hero) {
+    heroVideos = data.hero || [];
+    startHeroRotation();
+  }
+
+  // ROWS
+  renderRow(data.latest, latestRow);
+  renderRow(data.movies, moviesRow);
+  renderRow(data.trailers, trailersRow);
 }
 
 init();
