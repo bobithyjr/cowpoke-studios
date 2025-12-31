@@ -1,0 +1,21 @@
+body {
+  font-family: Arial;
+  background: #111;
+  color: #fff;
+  padding: 20px;
+}
+
+.video {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  align-items: center;
+}
+
+.video img {
+  width: 160px;
+}
+
+label {
+  margin-right: 8px;
+}
