@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cowpoke Studios</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
+</head>
+<body>
+
+<header class="top-nav">
+  <div class="nav-left">
+    <a href="index.html">
+      <img src="images/cow-logo.png" class="logo" alt="Cowpoke Studios Logo" />
+    </a>
+    <nav>
+      <a href="index.html" class="nav-link">HOME</a>
+      <a href="movies.html" class="nav-link">MOVIES</a>
+      <a href="store.html" class="nav-link">STORE</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 id="hero-title"></h1>
+    <button id="play-btn">PLAY</button>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Latest</h2>
+  <div class="row" id="latest-row"></div>
+</section>
+
+<section class="section">
+  <h2>Movies</h2>
+  <div class="row" id="movies-grid"></div>
+</section>
+
+<section class="section">
+  <h2>Trailers</h2>
+  <div class="row" id="trailers-grid"></div>
+</section>
+
+<!-- PLAYER -->
+<div id="player-modal" class="player-modal hidden">
+  <div class="player-backdrop"></div>
+  <div class="player-container">
+    <iframe id="player-frame" allowfullscreen allow="autoplay"></iframe>
+    <button class="close-player">✕</button>
+  </div>
+</div>
+
+</body>
+</html>
