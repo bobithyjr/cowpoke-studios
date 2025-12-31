@@ -1,5 +1,5 @@
 /* ================================
-   ELEMENT REFERENCES
+   ELEMENT REFERENCES (SAFE)
 ================================ */
 
 const hero = document.getElementById("hero");
@@ -27,18 +27,20 @@ let heroTimer = null;
 ================================ */
 
 function openVideo(video) {
+  if (!video) return;
+
   if (video.source === "youtube") {
     playerFrame.src =
       `https://www.youtube.com/embed/${video.youtubeId}?autoplay=1`;
-  } else {
-    // future self-hosted support
+  } else if (video.videoUrl) {
     playerFrame.src = video.videoUrl;
   }
 
-  player.classList.remove("hidden");
+  player?.classList.remove("hidden");
 }
 
 function closePlayer() {
+  if (!playerFrame || !player) return;
   playerFrame.src = "";
   player.classList.add("hidden");
 }
@@ -58,34 +60,30 @@ function createVideoCard(video) {
   card.title = video.title;
 
   card.addEventListener("click", () => openVideo(video));
-
   return card;
 }
 
 function renderRow(videos, container) {
-  if (!container) return;
+  if (!container || !Array.isArray(videos)) return;
 
   container.innerHTML = "";
-  videos.forEach(video => {
-    container.appendChild(createVideoCard(video));
-  });
+  videos.forEach(v => container.appendChild(createVideoCard(v)));
 }
 
 /* ================================
-   HERO
+   HERO (SAFE)
 ================================ */
 
 function renderHero(video) {
-  if (!video) return;
+  if (!hero || !video) return;
 
   hero.style.backgroundImage = `url(${video.thumbnail})`;
   heroTitle.textContent = video.title;
-
   heroPlay.onclick = () => openVideo(video);
 }
 
 function startHeroRotation() {
-  if (!heroVideos.length) return;
+  if (!hero || heroVideos.length === 0) return;
 
   renderHero(heroVideos[0]);
 
@@ -104,17 +102,19 @@ async function init() {
     const res = await fetch("/api/videos");
     const data = await res.json();
 
-    // HERO
-    heroVideos = data.hero || [];
-    startHeroRotation();
+    // HERO (only on index.html)
+    if (hero && Array.isArray(data.hero)) {
+      heroVideos = data.hero;
+      startHeroRotation();
+    }
 
-    // ROWS
-    renderRow(data.latest || [], latestRow);
-    renderRow(data.movies || [], moviesRow);
-    renderRow(data.trailers || [], trailersRow);
+    // ROWS (safe everywhere)
+    renderRow(data.latest, latestRow);
+    renderRow(data.movies, moviesRow);
+    renderRow(data.trailers, trailersRow);
 
   } catch (err) {
-    console.error("Failed to load videos", err);
+    console.error("Failed to load videos:", err);
   }
 }
 
